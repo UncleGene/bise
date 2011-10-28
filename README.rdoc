@@ -1,0 +1,22 @@
+= Bise
+Binary search for presorted text files. Finds the first occurance of a string
+with value >= provided term
+
+Finds the first string in the oredered file that satisfies term <= str
+Takes optional comparison block accepting term and str
+Default - { |term, str| term <=> str }
+
+== Installation
+
+  gem install rhymes
+
+
+== Usage
+   require 'bise'
+   # find word in dictionary
+   File.open('/usr/share/dict/words'){|f| f.bin_find('bo')}
+   
+   # find ip-to-country record
+   `wget "http://software77.net/geo-ip/?DL=1" -O IpToCountry.csv.gz && gunzip IpToCountry.csv.gz`
+   require 'ipaddr'
+   File.open('../../files/IpToCountry.csv'){|f| f.bin_find(IPAddr.new('72.4.120.124').to_i){|num,str|

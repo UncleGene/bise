@@ -1,0 +1,84 @@
+module BinarySearch     
+  def bin_find(term)
+    if block_given?
+      compare = lambda { |a, b| yield(a, b) }
+    else
+      compare = lambda { |a, b| a <=> b }
+    end
+    bin_search(term, 0, stat.size, &compare)
+  end
+
+  private
+  
+  def bin_search(term, start, finish, &block)
+    pos = (start + finish + 1) / 2 
+    seek pos
+    gets unless pos == 0
+    str = gets
+    return str if start >= finish
+    return nil unless str
+    comp = yield(term, str)
+    case comp 
+    when 1
+      bin_search(term, pos, finish, &block)
+    when -1
+     pos == finish ? str : bin_search(term, start, pos, &block)
+    else
+      str
+    end
+  end
+end
+
+class File < IO
+  include BinarySearch
+end
+
+
+#nums=[]
+#out=true
+#max = (4294967295 - 50331648) + 50331647
+#if ARGV[0] == '-test'
+#  n=ARGV[1].to_i
+#  n.times{ nums << rand( max + 1 )}
+#  out=false
+#else  
+#  ARGV.each do |argv|
+#    nums << argv.to_i #((($1.to_i*256)+$2.to_i)*256+$3.to_i)*256+$4.to_i if argv=~/(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/
+#  end
+#end
+#if nums.empty?
+#  puts "Please enter valid ip(s)"
+#  exit
+#end
+#
+#nums.each do |num| 
+#  ctry='Unknown'
+#  res=bin_find('../files/IpToCountry.csv',num) { |search, str|
+#    res = nil
+#    if str.empty? || str[0,1]!='"'
+#      res = 1
+#    else
+#      l, r = str.gsub('"','').split(',')[0,2].map(&:to_i)
+#      if (l..r) === search
+#        res = 0
+#      else
+#        res = search > r ? 1 : -1
+#      end
+#      res
+#    end
+#  }.gsub('"','').split(',')
+#  ctry=res[4] if (res[0].to_i..res[1].to_i)===num
+#  puts ctry if out
+#end
+
+itc_compare = lambda do |num, str|
+  return 1 if str.empty? || str[0] != '"'
+  l, r = str.gsub('"','').split(',')[0,2].map(&:to_i)
+  return 0 if (l..r) === num
+  num > r ? 1 : -1 
+end
+
+num = (($1.to_i << 8 | $2.to_i) << 8 | $3.to_i ) << 8 | $4.to_i  if ARGV[0]=~/(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/
+puts File.open('/usr/share/dict/words'){|f| f.bin_find(ARGV[0])}
+puts File.open('../files/IpToCountry.csv'){|f| f.bin_find(num, &itc_compare}
+
