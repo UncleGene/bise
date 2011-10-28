@@ -2,8 +2,8 @@ require "bise/version"
 
 module Bise  
   ##
-  # Finds the first string in the presorted text file that satisfies term <= str 
-  # Takes optional comparison block accepting term and str 
+  # Finds the first string in the presorted text file that satisfies term <= str. 
+  # Takes optional comparison block accepting term and str. 
   # Default - { |term, str| term <=> str }
 
   def bin_find(term, &comp)
