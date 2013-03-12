@@ -1,3 +1,4 @@
+{<img src="https://codeclimate.com/github/kalenkov/bise.png" />}[https://codeclimate.com/github/kalenkov/bise]
 = Bise
 Binary search for presorted text files. Gem adds #bin_find(term) method to File. It finds the first occurance of a string
 with value >= provided term.
